@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Yayınlanacak Sürüm (Örn: v1.0.1)'
+        description: 'Yayınlanacak Sürüm (Örn: v1.0.0)'
         required: true
-        default: 'v1.0.1'
+        default: 'v1.0.0'
 
 permissions:
   contents: write
@@ -38,7 +38,7 @@ jobs:
         run: |
           npx electron-builder --win portable --x64
         env:
-          GH_TOKEN: ${{ secrets.SURUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Rename Output EXE
         shell: pwsh
@@ -55,7 +55,7 @@ jobs:
           path: dist/TileTopia.exe
 
   # =========================================================================
-  # 2. ANDROID NATIVE APK DERLEMESİ
+  # 2. ANDROID NATIVE APK DERLEMESİ (Capacitor)
   # =========================================================================
   build-android:
     name: Build Android APK
@@ -69,31 +69,37 @@ jobs:
         with:
           node-version: 20
 
-      - name: Setup Java JDK
+      - name: Setup Java JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Setup Capacitor & Generate Android Project
+      - name: Prepare Web Assets
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          npx cap init "TileTopia" "com.can3y5.tiletopia" --web-dir "."
+          mkdir -p www
+          cp index.html manifest.json sw.js version.json www/ || true
+          cp -r css js libs www/
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Setup Capacitor & Add Android Platform
+        run: |
           npx cap add android
           npx cap sync android
 
-      - name: Build Android APK
+      - name: Build Android Debug APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: Rename Output APK
+      - name: Locate & Copy APK
         run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk ./TileTopia.apk
+          find android -name "*.apk" -exec cp {} ./TileTopia.apk \;
+          ls -la ./TileTopia.apk
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
@@ -134,15 +140,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           repository: Can3Y5/TileTopia_Surum
-          token: ${{ secrets.SURUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.get_version.outputs.TAG }}
           name: TileTopia ${{ steps.get_version.outputs.TAG }}
           body: |
             ## 🎮 TileTopia Resmi Sürüm (${{ steps.get_version.outputs.TAG }})
-            - **Windows EXE**: `TileTopia.exe` (Kurulumsuz taşınabilir sürüm)
-            - **Android APK**: `TileTopia.apk` (Mobil kurulum paketi)
-
-            Oyun içinden "Güncellemeleri Denetle" yapıldığında otomatik olarak bu sürüm algılanır!
+            
+            Tam teşekküllü **The Battle of Polytopia** 3D strateji oyunu!
+            
+            ### 📦 İndirilebilir Paketler:
+            - 🖥️ **Windows EXE**: `TileTopia.exe` (Kurulum gerektirmeyen taşınabilir sürüm)
+            - 📱 **Android APK**: `TileTopia.apk` (Android telefon ve tabletler için kurulum dosyası)
+            
+            ### ✨ Özellikler:
+            - 12 Orijinal Kabile (Xin-xi, Imperius, Bardur, Oumaji, Kickoo, Hoodrick, Luxidoor, Vengir, Zebasi, Ai-Mo, Quetzali, Yădakk)
+            - 5 Kollu Radyal Teknoloji Ağacı (Dairesel Tech Tree)
+            - 3D Düşük Poligonlu Uzayda Yüzen Ada Haritası & Sis (Fog of War)
+            - Yapay Zeka (AI Botlar) & Şehir Seviyelendirme Sistemi
+            - Otomatik Güncelleme Sistemi (Oyun içi "Güncellemeleri Denetle" desteği)
           files: |
             release_files/TileTopia.exe
             release_files/TileTopia.apk

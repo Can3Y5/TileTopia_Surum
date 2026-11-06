@@ -33,6 +33,9 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
     "electron": "^33.0.0",
     "electron-builder": "^25.1.8"
   }
