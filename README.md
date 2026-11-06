@@ -1,6 +1,6 @@
 # 🏰 TileTopia — Resmi Dağıtım & Güncelleme Merkezi
 
-[![Current Version](https://img.shields.io/badge/Sürüm-v1.0.3-brightgreen.svg)](https://github.com/Can3Y5/TileTopia_Surum/releases/latest)
+[![Current Version](https://img.shields.io/badge/Sürüm-v1.0.4-brightgreen.svg)](https://github.com/Can3Y5/TileTopia_Surum/releases/latest)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Windows-blue.svg)](https://github.com/Can3Y5/TileTopia_Surum/releases/latest)
 [![License](https://img.shields.io/badge/Lisans-Proprietary-red.svg)](https://github.com/Can3Y5/TileTopia_Surum)
 
@@ -12,14 +12,14 @@
 
 ---
 
-## 📲 İndirme Bağlantıları (v1.0.3)
+## 📲 İndirme Bağlantıları (v1.0.4)
 
 En son kararlı sürümü aşağıdaki bağlantılardan indirebilirsiniz:
 
 | Platform | Dosya | Açıklama | İndir |
 | :--- | :--- | :--- | :--- |
-| 📱 **Android** | `TileTopia.apk` | Android 8.0+ telefon ve tabletler için doğrudan kurulum paketi (~4 MB) | [⬇️ APK İndir](https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.3/TileTopia.apk) |
-| 🖥️ **Windows** | `TileTopia.exe` | Windows 10/11 için kurulumsuz, taşınabilir (portable) sürüm (~74 MB) | [⬇️ EXE İndir](https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.3/TileTopia.exe) |
+| 📱 **Android** | `TileTopia.apk` | Android 8.0+ telefon ve tabletler için doğrudan kurulum paketi (~4 MB) | [⬇️ APK İndir](https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.4/TileTopia.apk) |
+| 🖥️ **Windows** | `TileTopia.exe` | Windows 10/11 için kurulumsuz, taşınabilir (portable) sürüm (~74 MB) | [⬇️ EXE İndir](https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.4/TileTopia.exe) |
 
 *Tüm geçmiş sürümler ve sürüm notları için [Releases](https://github.com/Can3Y5/TileTopia_Surum/releases) sayfasını ziyaret edebilirsiniz.*
 
@@ -29,6 +29,7 @@ En son kararlı sürümü aşağıdaki bağlantılardan indirebilirsiniz:
 
 - 👑 **12 Resmi Kabile:** Xin-xi, Imperius, Bardur, Oumaji, Kickoo, Hoodrick, Luxidoor, Vengir, Zebasi, Ai-Mo, Quetzali ve Yădakk.
 - 🏛️ **5 Kollu Radyal Teknoloji Ağacı:** Felsefe, Şövalyelik, Denizcilik ve Taktik dallarında stratejik derinlik.
+- 🏰 **Kabileye Özgü 3B Şehirler & Kaleler:** Her kabilenin mimari tarzına uygun kale burçları, saray kuleleri ve avlular.
 - 🎨 **8 Farklı Asker Sınıfı & 3B Modeller:** Savaşçı, Kılıççı, Okçu, Muhafız, Atlı, Şövalye, Mancınık ve Dev için birbirinden tamamen farklı silahlar, kalkanlar ve silüetler.
 - 🛡️ **Otantik Kabile Başlangıç Birlikleri:** Vengir Kılıççıyla, Oumaji Atlıyla, Quetzali Muhafızla, Hoodrick Okçuyla başlar.
 - ❤️ **Görsel Sağlık Çubukları:** Savaşçıların üzerinde anlık can barları ve nefes alma (idle bobbing) animasyonları.
@@ -37,9 +38,9 @@ En son kararlı sürümü aşağıdaki bağlantılardan indirebilirsiniz:
 
 ---
 
-## 📋 Sürüm Notları (v1.0.3)
+## 📋 Sürüm Notları (v1.0.4)
 
-- **Askeri Çeşitlilik:** 8 farklı birim için özel 3B modeller (Kalkanlar, yaylar, iki-elli kılıçlar, binekler, dev gürz ve mancınık).
-- **Kabile Başlangıç Birlikleri:** Vengir Kılıççı, Oumaji Atlı, Quetzali Muhafız, Hoodrick Okçu ile başlar.
-- **12 Kabileye Özel Başlıklar:** Her kabilenin kendine ait miğfer ve ten rengi modellendi.
-- **Dinamik Zemin & Can Barları:** Geliştirilmiş binek pozları ve üst sağlık göstergeleri.
+- **3B Şehir ve Başkent Binaları:** Bütün şehirler kabilelerine özel mimariyle (kale avlusu, köşe burçları, giriş kapısı ve kabile sarayı/kulesi) 3B olarak haritada yerini aldı.
+- **Asker & Şehir Platform Düzenlemesi:** Şehir üzerinde asker dururken kalenin ve burçların net görülebilmesi için askerler yükseltilmiş kale platformu üzerinde konumlandırıldı.
+- **Kalıcı Android İmza Anahtarı:** APK artık 28 yıllık sabit imza anahtarıyla imzalanıyor. Gelecekteki güncellemelerde paket çakışması hatası yaşanmaz.
+- **Çevrimdışı ve Kararlılık İyileştirmeleri:** Güncelleme denetimi sessiz hata yakalama ve akıcı Three.js render döngüsüyle güçlendirildi.

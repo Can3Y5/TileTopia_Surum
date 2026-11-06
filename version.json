@@ -1,8 +1,8 @@
 {
-  "version": "1.0.3",
-  "name": "TileTopia v1.0.3 - Askeri Çeşitlilik ve Özel 3B Birlikler",
-  "releaseNotes": "8 farklı asker sınıfı için özel 3B modeller (Kalkanlar, yaylar, iki-elli kılıçlar, 4 bacaklı binekler, dev gürz, mancınık), kabileye özel başlangıç birimleri (Vengir Kılıççı, Oumaji Atlı, Quetzali Muhafız, Hoodrick Okçu) ve 12 kabileye özel başlıklar eklendi.",
+  "version": "1.0.4",
+  "name": "TileTopia v1.0.4 - 3B Şehirler & Kalıcı İmza",
+  "releaseNotes": "3B şehir ve başkent binaları kabilelerine özel mimariyle eklendi. Askerler kale platformu üzerinde duracak şekilde konumlandırılarak bina görünürlüğü sağlandı. Kalıcı 28 yıllık Android imza anahtarı entegre edildi.",
   "publishedAt": "2026-11-07",
-  "apkUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.3/TileTopia.apk",
-  "exeUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.3/TileTopia.exe"
+  "apkUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.4/TileTopia.apk",
+  "exeUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.4/TileTopia.exe"
 }
