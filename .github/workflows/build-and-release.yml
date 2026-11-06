@@ -136,11 +136,11 @@ jobs:
             echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create Release in TileTopia_Surum
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          repository: Can3Y5/TileTopia_Surum
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ secrets.SURUM_REPO_TOKEN && 'Can3Y5/TileTopia_Surum' || github.repository }}
+          token: ${{ secrets.SURUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.get_version.outputs.TAG }}
           name: TileTopia ${{ steps.get_version.outputs.TAG }}
           body: |
