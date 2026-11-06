@@ -1,0 +1,150 @@
+name: Build EXE & APK and Release to TileTopia_Surum
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Yayınlanacak Sürüm (Örn: v1.0.1)'
+        required: true
+        default: 'v1.0.1'
+
+permissions:
+  contents: write
+
+jobs:
+  # =========================================================================
+  # 1. WINDOWS STANDALONE EXE DERLEMESİ
+  # =========================================================================
+  build-windows:
+    name: Build Windows EXE
+    runs-on: windows-latest
+    steps:
+      - name: Checkout TileTopia Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Build Windows Portable EXE
+        run: |
+          npx electron-builder --win portable --x64
+        env:
+          GH_TOKEN: ${{ secrets.SURUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Rename Output EXE
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path "dist" -Filter "*.exe" | Select-Object -First 1
+          if ($exe) {
+            Copy-Item $exe.FullName "dist/TileTopia.exe" -Force
+          }
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TileTopia-Windows-EXE
+          path: dist/TileTopia.exe
+
+  # =========================================================================
+  # 2. ANDROID NATIVE APK DERLEMESİ
+  # =========================================================================
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout TileTopia Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Capacitor & Generate Android Project
+        run: |
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npx cap init "TileTopia" "com.can3y5.tiletopia" --web-dir "."
+          npx cap add android
+          npx cap sync android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Rename Output APK
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk ./TileTopia.apk
+
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TileTopia-Android-APK
+          path: TileTopia.apk
+
+  # =========================================================================
+  # 3. Can3Y5/TileTopia_Surum REPOSUNA YAYINLAMA
+  # =========================================================================
+  release:
+    name: Release to TileTopia_Surum
+    needs: [build-windows, build-android]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows EXE
+        uses: actions/download-artifact@v4
+        with:
+          name: TileTopia-Windows-EXE
+          path: release_files
+
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: TileTopia-Android-APK
+          path: release_files
+
+      - name: Determine Version Tag
+        id: get_version
+        run: |
+          if [ "${{ github.event.inputs.version }}" != "" ]; then
+            echo "TAG=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Release in TileTopia_Surum
+        uses: softprops/action-gh-release@v2
+        with:
+          repository: Can3Y5/TileTopia_Surum
+          token: ${{ secrets.SURUM_REPO_TOKEN || secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.get_version.outputs.TAG }}
+          name: TileTopia ${{ steps.get_version.outputs.TAG }}
+          body: |
+            ## 🎮 TileTopia Resmi Sürüm (${{ steps.get_version.outputs.TAG }})
+            - **Windows EXE**: `TileTopia.exe` (Kurulumsuz taşınabilir sürüm)
+            - **Android APK**: `TileTopia.apk` (Mobil kurulum paketi)
+
+            Oyun içinden "Güncellemeleri Denetle" yapıldığında otomatik olarak bu sürüm algılanır!
+          files: |
+            release_files/TileTopia.exe
+            release_files/TileTopia.apk
+          draft: false
+          prerelease: false

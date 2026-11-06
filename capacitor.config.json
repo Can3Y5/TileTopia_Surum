@@ -1,0 +1,12 @@
+{
+  "appId": "com.can3y5.tiletopia",
+  "appName": "TileTopia",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

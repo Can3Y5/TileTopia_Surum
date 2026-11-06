@@ -7,6 +7,7 @@ import { GameState, DB, Terrain, Res, Bld, UnitType, Tech, Reward } from './game
 import { BoardView3D } from './game-view3d.js';
 import { AIBrain } from './game-ai.js';
 import { AudioEngine } from './game-audio.js';
+import { GameUpdater } from './game-updater.js';
 
 export class GameUI {
     constructor() {
@@ -14,6 +15,7 @@ export class GameUI {
         this.view = null;
         this.ai = new AIBrain();
         this.audio = new AudioEngine();
+        this.updater = new GameUpdater();
 
         // Seçim durumu
         this.selX = -1;
@@ -166,6 +168,20 @@ export class GameUI {
         document.getElementById('btn-sound-toggle').onclick = () => {
             const muted = this.audio.toggleMute();
             document.getElementById('btn-sound-toggle').textContent = muted ? "Ses: KAPALI" : "Ses: AÇIK";
+        };
+
+        const checkBtn = document.getElementById('btn-check-update');
+        if (checkBtn) {
+            checkBtn.onclick = () => {
+                this.audio.playClick();
+                this.updater.checkForUpdates(false);
+            };
+        }
+
+        // Açılışta sessizce güncellemeyi denetle
+        setTimeout(() => {
+            this.updater.checkForUpdates(true);
+        }, 1500);
         };
     }
 

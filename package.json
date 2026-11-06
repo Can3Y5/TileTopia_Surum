@@ -1,0 +1,39 @@
+{
+  "name": "tiletopia",
+  "version": "1.0.0",
+  "description": "The Battle of Polytopia — 3D Sıra Tabanlı Strateji Oyunu",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win portable --x64",
+    "build:installer": "electron-builder --win nsis --x64"
+  },
+  "author": "Can3Y5",
+  "license": "MIT",
+  "build": {
+    "appId": "com.can3y5.tiletopia",
+    "productName": "TileTopia",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ],
+      "icon": "icon.ico"
+    },
+    "files": [
+      "index.html",
+      "version.json",
+      "css/**/*",
+      "js/**/*",
+      "libs/**/*",
+      "electron-main.js"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  }
+}
