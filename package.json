@@ -1,6 +1,6 @@
 {
   "name": "tiletopia",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Battle of Polytopia — 3D Sıra Tabanlı Strateji Oyunu",
   "main": "electron-main.js",
   "scripts": {

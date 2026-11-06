@@ -265,7 +265,7 @@ export class BoardView3D {
         const geo = new THREE.BoxGeometry(0.96, h, 0.96);
         const baseColor = DB.Terrains[tile.terr].color;
 
-        const mat = new THREE.MeshLambertMaterial({
+        const mat = new THREE.MeshStandardMaterial({
             color: baseColor,
             flatShading: true
         });
@@ -287,8 +287,8 @@ export class BoardView3D {
 
     buildIslandCliffs() {
         const s = this.g.size;
-        const cliffMat = new THREE.MeshLambertMaterial({ color: 0x2d3436, flatShading: true });
-        const dirtMat = new THREE.MeshLambertMaterial({ color: 0x5a4231, flatShading: true });
+        const cliffMat = new THREE.MeshStandardMaterial({ color: 0x2d3436, flatShading: true });
+        const dirtMat = new THREE.MeshStandardMaterial({ color: 0x5a4231, flatShading: true });
 
         // Haritanın 4 dış kenarı boyunca uzaya doğru inen fasetli kaya uçurumları
         for (let x = 0; x < s; x++) {
@@ -331,8 +331,8 @@ export class BoardView3D {
             const lhGroup = new THREE.Group();
             lhGroup.position.set(cx, 0.22, cy);
 
-            const redMat = new THREE.MeshLambertMaterial({ color: 0xe74c3c, flatShading: true });
-            const whiteMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+            const redMat = new THREE.MeshStandardMaterial({ color: 0xe74c3c, flatShading: true });
+            const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true });
             const lightMat = new THREE.MeshBasicMaterial({ color: 0xf1c40f });
 
             // Kırmızı-Beyaz çizgili gövde
@@ -360,7 +360,7 @@ export class BoardView3D {
         const group = new THREE.Group();
         group.position.set(x, 0.65, y);
 
-        const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+        const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true });
 
         const p1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.38, 0), cloudMat);
         p1.position.set(0, 0.15, 0);
@@ -390,8 +390,8 @@ export class BoardView3D {
             if (c.owner < 0) continue;
             const ownerColor = this.g.players[c.owner].tribe.colorHex;
 
-            const postMat = new THREE.MeshLambertMaterial({ color: ownerColor, flatShading: true });
-            const stripeMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+            const postMat = new THREE.MeshStandardMaterial({ color: ownerColor, flatShading: true });
+            const stripeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true });
 
             for (let dy = -c.border; dy <= c.border; dy++) {
                 for (let dx = -c.border; dx <= c.border; dx++) {
@@ -536,8 +536,8 @@ export class BoardView3D {
     }
 
     buildForestDecor(group, h) {
-        const treeMat = new THREE.MeshLambertMaterial({ color: 0x1f542a, flatShading: true });
-        const trunkMat = new THREE.MeshLambertMaterial({ color: 0x4a3525, flatShading: true });
+        const treeMat = new THREE.MeshStandardMaterial({ color: 0x1f542a, flatShading: true });
+        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3525, flatShading: true });
 
         const offsets = [
             [-0.18, -0.16, 0.48],
@@ -558,8 +558,8 @@ export class BoardView3D {
     }
 
     buildMountainDecor(group, h) {
-        const rockMat = new THREE.MeshLambertMaterial({ color: 0x63635f, flatShading: true });
-        const snowMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+        const rockMat = new THREE.MeshStandardMaterial({ color: 0x63635f, flatShading: true });
+        const snowMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true });
 
         const peak1 = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.65, 5), rockMat);
         peak1.position.set(0.05, h + 0.32, 0.05);
@@ -579,11 +579,11 @@ export class BoardView3D {
     buildResourceModel(group, res, h) {
         switch (res) {
             case Res.Fruit: {
-                const bush = new THREE.Mesh(new THREE.DodecahedronGeometry(0.18, 0), new THREE.MeshLambertMaterial({ color: 0x27ae60, flatShading: true }));
+                const bush = new THREE.Mesh(new THREE.DodecahedronGeometry(0.18, 0), new THREE.MeshStandardMaterial({ color: 0x27ae60, flatShading: true }));
                 bush.position.set(0, h + 0.14, 0);
                 group.add(bush);
 
-                const berryMat = new THREE.MeshLambertMaterial({ color: 0x3498db, flatShading: true }); // Görsel 1'deki mavi meyveler
+                const berryMat = new THREE.MeshStandardMaterial({ color: 0x3498db, flatShading: true }); // Görsel 1'deki mavi meyveler
                 const b1 = new THREE.Mesh(new THREE.SphereGeometry(0.06, 4, 4), berryMat);
                 b1.position.set(0.08, h + 0.22, 0.06);
                 const b2 = new THREE.Mesh(new THREE.SphereGeometry(0.05, 4, 4), berryMat);
@@ -592,7 +592,7 @@ export class BoardView3D {
                 break;
             }
             case Res.Crop: {
-                const wheatMat = new THREE.MeshLambertMaterial({ color: 0xf1c40f, flatShading: true });
+                const wheatMat = new THREE.MeshStandardMaterial({ color: 0xf1c40f, flatShading: true });
                 for (let i = -0.25; i <= 0.25; i += 0.16) {
                     const row = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.09, 0.08), wheatMat);
                     row.position.set(0, h + 0.05, i);
@@ -602,21 +602,21 @@ export class BoardView3D {
             }
             case Res.Game: {
                 // Görsel 1'deki kahverengi ayı / yabani av
-                const furMat = new THREE.MeshLambertMaterial({ color: 0x795548, flatShading: true });
+                const furMat = new THREE.MeshStandardMaterial({ color: 0x795548, flatShading: true });
                 const bear = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.2, 0.36), furMat);
                 bear.position.set(0, h + 0.14, 0);
                 group.add(bear);
                 break;
             }
             case Res.Metal: {
-                const oreMat = new THREE.MeshLambertMaterial({ color: 0x3498db, flatShading: true });
+                const oreMat = new THREE.MeshStandardMaterial({ color: 0x3498db, flatShading: true });
                 const c1 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14, 0), oreMat);
                 c1.position.set(0.1, h + 0.16, 0.08);
                 group.add(c1);
                 break;
             }
             case Res.Fish: {
-                const fishMat = new THREE.MeshLambertMaterial({ color: 0x2980b9, flatShading: true });
+                const fishMat = new THREE.MeshStandardMaterial({ color: 0x2980b9, flatShading: true });
                 const fish = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.24, 4), fishMat);
                 fish.rotation.z = Math.PI / 3;
                 fish.position.set(0, h + 0.08, 0);
@@ -629,35 +629,35 @@ export class BoardView3D {
     buildBuildingModel(group, bld, h) {
         switch (bld) {
             case Bld.Farm: {
-                const barnMat = new THREE.MeshLambertMaterial({ color: 0xd35400, flatShading: true });
+                const barnMat = new THREE.MeshStandardMaterial({ color: 0xd35400, flatShading: true });
                 const barn = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.24, 0.28), barnMat);
                 barn.position.set(-0.1, h + 0.12, -0.1);
                 group.add(barn);
                 break;
             }
             case Bld.Mine: {
-                const cave = new THREE.Mesh(new THREE.DodecahedronGeometry(0.28, 0), new THREE.MeshLambertMaterial({ color: 0x485460, flatShading: true }));
+                const cave = new THREE.Mesh(new THREE.DodecahedronGeometry(0.28, 0), new THREE.MeshStandardMaterial({ color: 0x485460, flatShading: true }));
                 cave.position.set(0, h + 0.18, 0);
                 group.add(cave);
                 break;
             }
             case Bld.Lumber: {
-                const logMat = new THREE.MeshLambertMaterial({ color: 0x5d4037, flatShading: true });
+                const logMat = new THREE.MeshStandardMaterial({ color: 0x5d4037, flatShading: true });
                 const hut = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.2, 0.24), logMat);
                 hut.position.set(0, h + 0.1, 0);
                 group.add(hut);
                 break;
             }
             case Bld.Port: {
-                const pier = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.52), new THREE.MeshLambertMaterial({ color: 0x795548, flatShading: true }));
+                const pier = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.52), new THREE.MeshStandardMaterial({ color: 0x795548, flatShading: true }));
                 pier.position.set(-0.16, h + 0.06, 0);
                 group.add(pier);
 
-                const boat = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.1, 0.34), new THREE.MeshLambertMaterial({ color: 0xd7ccc8, flatShading: true }));
+                const boat = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.1, 0.34), new THREE.MeshStandardMaterial({ color: 0xd7ccc8, flatShading: true }));
                 boat.position.set(0.14, h + 0.06, 0.04);
                 group.add(boat);
 
-                const sail = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.32, 3), new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true }));
+                const sail = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.32, 3), new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true }));
                 sail.position.set(0.14, h + 0.25, 0.04);
                 group.add(sail);
                 break;
@@ -669,11 +669,11 @@ export class BoardView3D {
         const isNeutral = (city.owner < 0);
         const tribeColor = isNeutral ? 0x95a5a6 : this.g.players[city.owner].tribe.colorHex;
 
-        const stoneMat = new THREE.MeshLambertMaterial({ color: isNeutral ? 0xbdc3c7 : 0xe0e6ed, flatShading: true });
-        const roofMat = new THREE.MeshLambertMaterial({ color: tribeColor, flatShading: true });
+        const stoneMat = new THREE.MeshStandardMaterial({ color: isNeutral ? 0xbdc3c7 : 0xe0e6ed, flatShading: true });
+        const roofMat = new THREE.MeshStandardMaterial({ color: tribeColor, flatShading: true });
 
         if (city.walls) {
-            const wallMat = new THREE.MeshLambertMaterial({ color: 0x5a6268, flatShading: true });
+            const wallMat = new THREE.MeshStandardMaterial({ color: 0x5a6268, flatShading: true });
             const s = 0.88, wh = 0.24, th = 0.08;
             const w1 = new THREE.Mesh(new THREE.BoxGeometry(s, wh, th), wallMat);
             w1.position.set(0, h + wh / 2, -s / 2);
@@ -688,7 +688,7 @@ export class BoardView3D {
 
         if (isNeutral) {
             // Görsel 1'deki konik çatılı köy çadırları
-            const tentMat = new THREE.MeshLambertMaterial({ color: 0xc89d6c, flatShading: true });
+            const tentMat = new THREE.MeshStandardMaterial({ color: 0xc89d6c, flatShading: true });
             const tent1 = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.3, 5), tentMat);
             tent1.position.set(-0.12, h + 0.15, -0.1);
             const tent2 = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.28, 5), tentMat);
@@ -785,10 +785,10 @@ export class BoardView3D {
         const tribeColor = player.tribe.colorHex;
         const skinColor = 0xf5cd79; // Sevimli sarı/bronz Polytopia ten rengi
 
-        const skinMat = new THREE.MeshLambertMaterial({ color: skinColor, flatShading: true });
-        const armorMat = new THREE.MeshLambertMaterial({ color: tribeColor, flatShading: true });
-        const darkMat = new THREE.MeshLambertMaterial({ color: 0x2d3436, flatShading: true });
-        const metalMat = new THREE.MeshLambertMaterial({ color: 0xdfe6e9, flatShading: true });
+        const skinMat = new THREE.MeshStandardMaterial({ color: skinColor, flatShading: true });
+        const armorMat = new THREE.MeshStandardMaterial({ color: tribeColor, flatShading: true });
+        const darkMat = new THREE.MeshStandardMaterial({ color: 0x2d3436, flatShading: true });
+        const metalMat = new THREE.MeshStandardMaterial({ color: 0xdfe6e9, flatShading: true });
 
         const scale = (u.type === UnitType.Giant) ? 1.7 : 1.0;
 
@@ -820,7 +820,7 @@ export class BoardView3D {
 
         // 4. Silahlar ve Binekler
         if (u.type === UnitType.Rider || u.type === UnitType.Knight) {
-            const horseMat = new THREE.MeshLambertMaterial({ color: u.type === UnitType.Knight ? 0x2c3e50 : 0x8e44ad, flatShading: true });
+            const horseMat = new THREE.MeshStandardMaterial({ color: u.type === UnitType.Knight ? 0x2c3e50 : 0x8e44ad, flatShading: true });
             const horse = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.24, 0.52), horseMat);
             horse.position.set(0, 0.16, 0);
             group.add(horse);
@@ -849,9 +849,9 @@ export class BoardView3D {
     }
 
     addHeadwear(group, tribe, unitType, scale) {
-        const tribeMat = new THREE.MeshLambertMaterial({ color: tribe.colorHex, flatShading: true });
-        const darkMat = new THREE.MeshLambertMaterial({ color: 0x2d3436, flatShading: true });
-        const whiteMat = new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: true });
+        const tribeMat = new THREE.MeshStandardMaterial({ color: tribe.colorHex, flatShading: true });
+        const darkMat = new THREE.MeshStandardMaterial({ color: 0x2d3436, flatShading: true });
+        const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true });
 
         // Görsel 2'deki Kabile Başlıkları
         switch (tribe.name) {
@@ -880,18 +880,18 @@ export class BoardView3D {
             }
             case 'Imperius': {
                 // Roma miğferi ve kırmızı sorguç
-                const helm = new THREE.Mesh(new THREE.BoxGeometry(0.3 * scale, 0.1 * scale, 0.3 * scale), new THREE.MeshLambertMaterial({ color: 0xf1c40f }));
+                const helm = new THREE.Mesh(new THREE.BoxGeometry(0.3 * scale, 0.1 * scale, 0.3 * scale), new THREE.MeshStandardMaterial({ color: 0xf1c40f }));
                 helm.position.y = 0.58 * scale;
-                const plume = new THREE.Mesh(new THREE.BoxGeometry(0.06 * scale, 0.16 * scale, 0.32 * scale), new THREE.MeshLambertMaterial({ color: 0xe74c3c }));
+                const plume = new THREE.Mesh(new THREE.BoxGeometry(0.06 * scale, 0.16 * scale, 0.32 * scale), new THREE.MeshStandardMaterial({ color: 0xe74c3c }));
                 plume.position.y = 0.68 * scale;
                 group.add(helm); group.add(plume);
                 break;
             }
             case 'Kickoo': {
                 // Alın bandı ve renkli tropik tüyler
-                const band = new THREE.Mesh(new THREE.BoxGeometry(0.3 * scale, 0.06 * scale, 0.3 * scale), new THREE.MeshLambertMaterial({ color: 0xe74c3c }));
+                const band = new THREE.Mesh(new THREE.BoxGeometry(0.3 * scale, 0.06 * scale, 0.3 * scale), new THREE.MeshStandardMaterial({ color: 0xe74c3c }));
                 band.position.y = 0.52 * scale;
-                const f1 = new THREE.Mesh(new THREE.BoxGeometry(0.03 * scale, 0.22 * scale, 0.03 * scale), new THREE.MeshLambertMaterial({ color: 0x2ecc71 }));
+                const f1 = new THREE.Mesh(new THREE.BoxGeometry(0.03 * scale, 0.22 * scale, 0.03 * scale), new THREE.MeshStandardMaterial({ color: 0x2ecc71 }));
                 f1.position.set(0.08 * scale, 0.66 * scale, -0.1 * scale);
                 group.add(band); group.add(f1);
                 break;

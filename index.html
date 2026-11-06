@@ -203,7 +203,7 @@
     <div id="settings-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <h2 style="font-size: 20px; margin-bottom: 8px;">⚙️ Oyun Ayarları</h2>
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Sürüm: <span id="app-version">v1.0.2 (GitHub Auto-Update)</span></div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Sürüm: <span id="app-version">v1.0.1 (GitHub Auto-Update)</span></div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button id="btn-sound-toggle" class="btn-research-action" style="width: 100%;">Ses: AÇIK</button>
                 <button id="btn-check-update" class="btn-research-action" style="width: 100%; background: #0984e3;">🔄 Güncellemeleri Denetle</button>
@@ -281,7 +281,7 @@
                     if (reg) {
                         reg.update().then(() => {
                             setTimeout(() => {
-                                btn.textContent = "✓ Uygulama Güncel! (v1.0.2)";
+                                btn.textContent = "✓ Uygulama Güncel! (v1.0.1)";
                                 setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2500);
                             }, 800);
                         });

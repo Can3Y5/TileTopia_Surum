@@ -182,7 +182,6 @@ export class GameUI {
         setTimeout(() => {
             this.updater.checkForUpdates(true);
         }, 1500);
-        };
     }
 
     // ---------------------------------------------------------------- GÖRSEL 3: RADYAL TEKNOLOJİ AĞACI MOTORU
