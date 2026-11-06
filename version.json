@@ -1,7 +1,7 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "name": "TileTopia",
-  "releaseNotes": "Play başlatma butonu ve 3B gölgelendirme motoru güncellendi.",
+  "releaseNotes": "Yeni Ana Menü, 12 kabileye özel 3B binalar ve silahlar, can çubukları ve gelişmiş sis sistemi eklendi.",
   "publishedAt": "2026-11-06",
   "apkUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/latest/download/TileTopia.apk",
   "exeUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/latest/download/TileTopia.exe"

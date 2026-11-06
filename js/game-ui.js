@@ -36,6 +36,8 @@ export class GameUI {
         this.settingsModal = document.getElementById('settings-modal');
         this.statsModal = document.getElementById('stats-modal');
         this.toastContainer = document.getElementById('toast-container');
+        this.screenMainMenu = document.getElementById('screen-main-menu');
+        this.guideModal = document.getElementById('guide-modal');
 
         // Ayarlar
         this.selectedTribeIdx = 2; // Bardur (Varsayılan)
@@ -50,12 +52,53 @@ export class GameUI {
         this.radialNodes = [];
         this.selectedTechKey = null;
 
+        this.initMainMenu();
         this.initTribePicker();
         this.initHUDButtons();
         this.initRadialTreeEvents();
     }
 
     // ---------------------------------------------------------------- GÖRSEL 2: KABİLE SEÇİM EKRANI
+
+    initMainMenu() {
+        const btnPlay = document.getElementById('btn-menu-play');
+        if (btnPlay) {
+            btnPlay.onclick = () => {
+                this.audio.playClick();
+                if (this.screenMainMenu) this.screenMainMenu.classList.add('hidden');
+                this.screenTribePicker.classList.remove('hidden');
+            };
+        }
+
+        const btnSettings = document.getElementById('btn-menu-settings');
+        if (btnSettings) {
+            btnSettings.onclick = () => {
+                this.audio.playClick();
+                this.settingsModal.classList.remove('hidden');
+            };
+        }
+
+        const btnGuide = document.getElementById('btn-menu-guide');
+        if (btnGuide) {
+            btnGuide.onclick = () => {
+                this.audio.playClick();
+                if (this.guideModal) this.guideModal.classList.remove('hidden');
+            };
+        }
+
+        const guideClose = document.getElementById('guide-close');
+        if (guideClose) {
+            guideClose.onclick = () => {
+                this.audio.playClick();
+                if (this.guideModal) this.guideModal.classList.add('hidden');
+            };
+        }
+
+        // Açılışta sessizce güncelleme durumunu sorgula
+        setTimeout(() => {
+            this.updater.checkForUpdates(true);
+        }, 1200);
+    }
 
     initTribePicker() {
         const grid = document.getElementById('tribe-grid-container');
@@ -95,6 +138,15 @@ export class GameUI {
             this.startGame();
         };
 
+        const backBtn = document.getElementById('btn-picker-back');
+        if (backBtn) {
+            backBtn.onclick = () => {
+                this.audio.playClick();
+                this.screenTribePicker.classList.add('hidden');
+                if (this.screenMainMenu) this.screenMainMenu.classList.remove('hidden');
+            };
+        }
+
         // Tam Ekran Desteği (Android İçin)
         document.getElementById('btn-fullscreen-toggle').onclick = () => {
             if (!document.fullscreenElement) {
@@ -106,6 +158,7 @@ export class GameUI {
     }
 
     startGame() {
+        if (this.screenMainMenu) this.screenMainMenu.classList.add('hidden');
         this.screenTribePicker.classList.add('hidden');
         this.topHudBar.classList.remove('hidden');
         this.bottomActionBar.classList.remove('hidden');

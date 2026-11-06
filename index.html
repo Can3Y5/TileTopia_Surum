@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>The Battle of Polytopia — Kabileler</title>
+    <title>TileTopia — The Battle of Polytopia</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/game.css">
@@ -21,6 +21,55 @@
 
     <!-- 3D Uzay Sahnesi (Three.js Canvas) -->
     <div id="canvas-container"></div>
+
+    <!-- ==========================================================================
+         ANA EKRAN / TITLE SCREEN (Main Menu & Update Center)
+         ========================================================================== -->
+    <div id="screen-main-menu" class="screen-main-menu">
+        <div class="main-title-logo">🏰 TILETOPIA ⚔️</div>
+        <div class="main-subtitle">3B Sıra Tabanlı Strateji Oyunu</div>
+
+        <!-- Ana Menü Eylem Butonları -->
+        <div class="main-menu-actions">
+            <button id="btn-menu-play" class="btn-main-menu primary">
+                ⚔️ OYNA (PLAY)
+            </button>
+            <button id="btn-menu-settings" class="btn-main-menu">
+                ⚙️ AYARLAR
+            </button>
+            <button id="btn-menu-guide" class="btn-main-menu">
+                📖 NASIL OYNANIR
+            </button>
+        </div>
+
+        <!-- Sürüm & Güncelleme Notları Bölümü -->
+        <div id="main-menu-update-card" class="main-menu-update-card">
+            <!-- GameUpdater tarafından doldurulur -->
+            <div class="update-alert-card latest">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; color: #00b894; display: flex; align-items: center; gap: 6px;">
+                        ✓ En Son Sürümdesiniz: <span style="color: #ffffff;">v1.0.2</span>
+                    </span>
+                    <button id="btn-menu-check-again" class="btn-check-pill">
+                        🔄 Denetle
+                    </button>
+                </div>
+                <details style="margin-top: 8px; font-size: 12px; color: rgba(255,255,255,0.7); cursor: pointer;" open>
+                    <summary style="font-weight: 600; color: #74b9ff; margin-bottom: 4px;">📋 Sürüm v1.0.2 Notları</summary>
+                    <ul style="padding-left: 18px; margin-top: 4px; line-height: 1.5; color: rgba(255,255,255,0.85);">
+                        <li><strong>Ana Ekran:</strong> Oyun açılış menüsü, sürüm kontrol merkezi ve kılavuz eklendi.</li>
+                        <li><strong>12 Kabile Mimarisi:</strong> Her kabileye özel gotik kaleler, pagodalar ve tapınaklar.</li>
+                        <li><strong>Gelişmiş Savaşçılar:</strong> Kabile miğferleri, can barları ve nefes alma animasyonları.</li>
+                        <li><strong>Organik Sis:</strong> Haritada yumuşak dalgalanan sis bulutları oluşturuldu.</li>
+                    </ul>
+                </details>
+            </div>
+        </div>
+
+        <div class="main-footer">
+            TileTopia Sürüm: <span id="main-current-version">v1.0.2</span> &bull; 12 Kabile &bull; 3B Low-Poly
+        </div>
+    </div>
 
     <!-- ==========================================================================
          GÖRSEL 4: OYUN İÇİ ÜST MERKEZ BAŞLIK (Score, Stars, Turn)
@@ -136,7 +185,10 @@
     <!-- ==========================================================================
          GÖRSEL 2: KABİLE SEÇİM EKRANI (Pick Your Tribe)
          ========================================================================== -->
-    <div id="screen-tribe-picker" class="screen-tribe-picker">
+    <div id="screen-tribe-picker" class="screen-tribe-picker hidden">
+        <!-- Ana Menüye Dönüş Butonu -->
+        <button id="btn-picker-back" class="circle-back-btn" style="position: absolute; top: 16px; left: 16px; z-index: 10;">‹</button>
+
         <div class="tribe-picker-title">-PICK YOUR TRIBE-</div>
         <div class="tribe-picker-subtitle">Regular Tribes</div>
 
@@ -193,17 +245,42 @@
         </div>
     </div>
 
-    <!-- Güncelleme Bildirim Çubuğu (Auto-Update Toast) -->
-    <div id="update-banner" class="toast" style="display: none; position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #0984e3; border: 2px solid #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: auto;">
-        <span>🚀 Yeni bir güncelleme yayınlandı!</span>
-        <button id="btn-apply-update" style="margin-left: 12px; padding: 6px 14px; background: #ffffff; color: #000; border: none; border-radius: 14px; font-weight: 700; cursor: pointer;">Şimdi Güncelle</button>
+    <!-- Nasıl Oynanır / Rehber Modalı -->
+    <div id="guide-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="max-height: 85vh; overflow-y: auto;">
+            <h2 style="font-size: 22px; margin-bottom: 14px; text-align: center;">📖 Nasıl Oynanır?</h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.85);">
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 12px;">
+                    <strong style="color: #f1c40f; font-size: 15px;">⭐ 1. Yıldızlar & Ekonomi</strong><br>
+                    Şehirleriniz her tur size yıldız kazandırır. Yıldızları haritadaki kaynakları (meyve, orman, tarla) toplamak, yeni savaşçılar üretmek ve teknoloji araştırmak için kullanın.
+                </div>
+
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 12px;">
+                    <strong style="color: #00cec9; font-size: 15px;">🏛️ 2. Radyal Teknoloji Ağacı</strong><br>
+                    Sağ alttaki sütun simgesine basarak 5 ana dala ayrılan dairesel teknoloji ağacına ulaşın. Felsefe (Philosophy) teknolojisini açarsanız sonraki tüm araştırmalarınız %33 daha ucuz olur!
+                </div>
+
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 12px;">
+                    <strong style="color: #ff7675; font-size: 15px;">⚔️ 3. Savaş ve Birlikler</strong><br>
+                    Birliklerinizi düşman üzerine tıklayarak savaştırın. Dağlar ve şehir surları savunma avantajı sağlar. Birimlerin üzerinde anlık can barları yer alır.
+                </div>
+
+                <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 12px;">
+                    <strong style="color: #a29bfe; font-size: 15px;">🏰 4. Şehir Seviyesi & Giant</strong><br>
+                    Şehir alanınızdaki kaynakları işleyerek şehrinize seviye atlatın. Seviye 5'e ulaşan şehirler ordunuza devasa 40 cana sahip Giant (Dev) kazandırır!
+                </div>
+            </div>
+
+            <button id="guide-close" class="btn-research-action" style="width: 100%; margin-top: 18px; background: #2d3436;">Anladım</button>
+        </div>
     </div>
 
     <!-- Ayarlar Modalı -->
     <div id="settings-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <h2 style="font-size: 20px; margin-bottom: 8px;">⚙️ Oyun Ayarları</h2>
-            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Sürüm: <span id="app-version">v1.0.1 (GitHub Auto-Update)</span></div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Sürüm: <span id="app-version">v1.0.2 (GitHub Auto-Update)</span></div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button id="btn-sound-toggle" class="btn-research-action" style="width: 100%;">Ses: AÇIK</button>
                 <button id="btn-check-update" class="btn-research-action" style="width: 100%; background: #0984e3;">🔄 Güncellemeleri Denetle</button>
@@ -231,71 +308,6 @@
             <button id="btn-play-again" class="btn-play-game" style="width: 100%;">TEKRAR OYNA</button>
         </div>
     </div>
-
-    <!-- PWA Service Worker ve Otomatik Güncelleme Motoru -->
-    <script>
-        let waitingWorker = null;
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then((reg) => {
-                    // Güncelleme kontrolü
-                    reg.onupdatefound = () => {
-                        const newWorker = reg.installing;
-                        newWorker.onstatechange = () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                waitingWorker = newWorker;
-                                const banner = document.getElementById('update-banner');
-                                if (banner) banner.style.display = 'flex';
-                            }
-                        };
-                    };
-                }).catch(() => {});
-
-                // Yeni worker devreye girdiğinde sayfayı pürüzsüzce yenile
-                let refreshing = false;
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    if (!refreshing) {
-                        refreshing = true;
-                        window.location.reload();
-                    }
-                });
-            });
-        }
-
-        // Güncellemeyi uygula butonu
-        document.getElementById('btn-apply-update')?.addEventListener('click', () => {
-            if (waitingWorker) {
-                waitingWorker.postMessage({ type: 'SKIP_WAITING' });
-            } else {
-                window.location.reload();
-            }
-        });
-
-        // Manuel Güncelleme Denetimi Butonu
-        document.getElementById('btn-check-update')?.addEventListener('click', () => {
-            const btn = document.getElementById('btn-check-update');
-            btn.textContent = "Denetleniyor...";
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistration().then((reg) => {
-                    if (reg) {
-                        reg.update().then(() => {
-                            setTimeout(() => {
-                                btn.textContent = "✓ Uygulama Güncel! (v1.0.1)";
-                                setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2500);
-                            }, 800);
-                        });
-                    } else {
-                        btn.textContent = "✓ En Son Sürüm";
-                        setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2000);
-                    }
-                });
-            } else {
-                btn.textContent = "✓ En Son Sürüm";
-                setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2000);
-            }
-        });
-    </script>
 
     <!-- Oyun Başlatıcı -->
     <script type="module">
