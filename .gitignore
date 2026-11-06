@@ -1,0 +1,9 @@
+.dotnet/
+.vs/
+.idea/
+bin/
+obj/
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

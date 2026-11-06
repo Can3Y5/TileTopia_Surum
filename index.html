@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>The Battle of Polytopia — Kabileler</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚔️</text></svg>">
+
+    <!-- 3D Kütüphaneleri -->
+    <script src="libs/three.min.js"></script>
+    <script src="libs/OrbitControls.js"></script>
+    <script src="libs/tween.umd.js"></script>
+</head>
+<body>
+
+    <!-- 3D Uzay Sahnesi (Three.js Canvas) -->
+    <div id="canvas-container"></div>
+
+    <!-- ==========================================================================
+         GÖRSEL 4: OYUN İÇİ ÜST MERKEZ BAŞLIK (Score, Stars, Turn)
+         ========================================================================== -->
+    <div id="top-hud-bar" class="top-hud-bar hidden">
+        <div class="top-hud-col">
+            <span class="top-hud-label">Score</span>
+            <span id="hud-score-val" class="top-hud-val">0</span>
+        </div>
+        <div class="top-hud-col">
+            <span class="top-hud-label">Stars <span id="hud-income-val">(+2)</span></span>
+            <span id="hud-stars-val" class="top-hud-val"><span class="star-icon">⭐</span> 5</span>
+        </div>
+        <div class="top-hud-col">
+            <span class="top-hud-label">Turn</span>
+            <span id="hud-turn-val" class="top-hud-val">1</span>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         GÖRSEL 4: SAĞ ALT DAİRESEL EYLEM BUTONLARI (Settings, Stats, Tech, End Turn)
+         ========================================================================== -->
+    <div id="bottom-action-bar" class="bottom-action-bar hidden">
+        <!-- 1. Settings -->
+        <div class="action-circle-group">
+            <button id="btn-circle-settings" class="action-circle-btn">☰</button>
+            <span class="action-circle-label">Settings</span>
+        </div>
+
+        <!-- 2. Game Stats -->
+        <div class="action-circle-group">
+            <button id="btn-circle-stats" class="action-circle-btn">
+                <span id="hud-avatar-icon">🧔</span>
+                <span id="hud-rank-badge" class="rank-badge">1st</span>
+            </button>
+            <span class="action-circle-label">Game Stats</span>
+        </div>
+
+        <!-- 3. Tech Tree -->
+        <div class="action-circle-group">
+            <button id="btn-circle-tech" class="action-circle-btn btn-circle-tech">🏛️</button>
+            <span class="action-circle-label">Tech Tree</span>
+        </div>
+
+        <!-- 4. End Turn -->
+        <div class="action-circle-group">
+            <button id="btn-circle-end-turn" class="action-circle-btn btn-circle-end-turn">✓</button>
+            <span class="action-circle-label">End Turn</span>
+        </div>
+    </div>
+
+    <!-- Alt Seçili Kare / Birlik / Şehir Çekmecesi -->
+    <div id="context-drawer" class="context-drawer hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="drawer-icon" style="font-size: 22px;">🌱</span>
+                <div>
+                    <strong id="drawer-title" style="font-size: 15px;">Ova</strong>
+                    <div id="drawer-subtitle" style="font-size: 12px; color: var(--text-muted);">Savunma: %0</div>
+                </div>
+            </div>
+            <button id="drawer-close" style="background: none; border: none; color: #fff; font-size: 18px; cursor: pointer;">✕</button>
+        </div>
+        <div id="drawer-body"></div>
+    </div>
+
+    <!-- Sağ Üst Bildirim Balonları -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- ==========================================================================
+         GÖRSEL 3: RADYAL TEKNOLOJİ AĞACI EKRANI (Radial Tech Tree Screen)
+         ========================================================================== -->
+    <div id="screen-tech-radial" class="screen-tech-radial hidden">
+        <!-- Sol Üst Geri Butonu -->
+        <button id="radial-back-btn" class="circle-back-btn">‹</button>
+
+        <!-- Üst İstatistikler -->
+        <div class="top-hud-bar" style="pointer-events: auto;">
+            <div class="top-hud-col">
+                <span class="top-hud-label">Score</span>
+                <span id="radial-score-val" class="top-hud-val">5,635</span>
+            </div>
+            <div class="top-hud-col">
+                <span class="top-hud-label">Stars <span id="radial-income-val">(+11)</span></span>
+                <span id="radial-stars-val" class="top-hud-val"><span class="star-icon">⭐</span> 57</span>
+            </div>
+            <div class="top-hud-col">
+                <span class="top-hud-label">Turn</span>
+                <span id="radial-turn-val" class="top-hud-val">11</span>
+            </div>
+        </div>
+
+        <!-- Radyal Ağaç Çizim Canvas'ı -->
+        <canvas id="radial-tree-canvas"></canvas>
+
+        <!-- Alt Açıklama Metni (Görsel 3'teki orijinal metin) -->
+        <div class="radial-footer-text">
+            Tech costs increase for each city in your empire.<br>
+            Philosophy reduces the price of all technologies by 33%!
+        </div>
+
+        <!-- Teknoloji Detay ve Araştırma Kartı -->
+        <div id="tech-detail-sheet" class="tech-detail-sheet hidden">
+            <span id="tech-sheet-icon" style="font-size: 32px;">🏹</span>
+            <div>
+                <strong id="tech-sheet-title" style="font-size: 16px;">Okçuluk</strong>
+                <div id="tech-sheet-desc" style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Okçu birimini açar.</div>
+            </div>
+            <div id="tech-sheet-action" style="margin-left: 12px;"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         GÖRSEL 2: KABİLE SEÇİM EKRANI (Pick Your Tribe)
+         ========================================================================== -->
+    <div id="screen-tribe-picker" class="screen-tribe-picker">
+        <div class="tribe-picker-title">-PICK YOUR TRIBE-</div>
+        <div class="tribe-picker-subtitle">Regular Tribes</div>
+
+        <!-- 12 Regular Kabile Portreleri Izgarası -->
+        <div id="tribe-grid-container" class="tribe-grid-container"></div>
+
+        <div id="picker-tribe-desc" style="font-size: 14px; color: rgba(255,255,255,0.9); margin-top: 18px; text-align: center; max-width: 500px;">
+            Karlar altındaki çam ormanlarında iz süren usta Viking avcıları.
+        </div>
+
+        <div class="tribe-config-panel">
+            <select id="select-map-size" style="padding: 10px 14px; border-radius: 20px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #fff;">
+                <option value="11">Küçük (11 × 11)</option>
+                <option value="14" selected>Normal (14 × 14)</option>
+                <option value="18">Büyük (18 × 18)</option>
+            </select>
+
+            <select id="select-difficulty" style="padding: 10px 14px; border-radius: 20px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #fff;">
+                <option value="0">Kolay</option>
+                <option value="1" selected>Normal</option>
+                <option value="2">Zor</option>
+                <option value="3">Çılgın</option>
+            </select>
+
+            <select id="select-opponents" style="padding: 10px 14px; border-radius: 20px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #fff;">
+                <option value="1">1 Rakip</option>
+                <option value="2">2 Rakip</option>
+                <option value="3" selected>3 Rakip</option>
+                <option value="4">4 Rakip</option>
+            </select>
+
+            <select id="select-game-mode" style="padding: 10px 14px; border-radius: 20px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #fff;">
+                <option value="perfection" selected>Perfection (30 Tur)</option>
+                <option value="domination">Domination (Fetih)</option>
+                <option value="blitz">Blitz (15 Tur)</option>
+            </select>
+
+            <button id="btn-fullscreen-toggle" style="padding: 10px 16px; border-radius: 20px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid #fff; cursor: pointer;">
+                📱 Tam Ekran
+            </button>
+        </div>
+
+        <button id="btn-play-game" class="btn-play-game" style="margin-top: 24px;">
+            PLAY GAME
+        </button>
+    </div>
+
+    <!-- Şehir Seviye Atlama Ödül Penceresi (Modal) -->
+    <div id="reward-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="text-align: center;">
+            <h2 style="font-size: 22px; margin-bottom: 6px;">🎉 Şehir Seviye Atladı!</h2>
+            <p id="reward-modal-subtitle" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Bir ödül seçin:</p>
+            <div id="reward-choices" style="display: flex; justify-content: center; gap: 24px;"></div>
+        </div>
+    </div>
+
+    <!-- Güncelleme Bildirim Çubuğu (Auto-Update Toast) -->
+    <div id="update-banner" class="toast" style="display: none; position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #0984e3; border: 2px solid #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.8); pointer-events: auto;">
+        <span>🚀 Yeni bir güncelleme yayınlandı!</span>
+        <button id="btn-apply-update" style="margin-left: 12px; padding: 6px 14px; background: #ffffff; color: #000; border: none; border-radius: 14px; font-weight: 700; cursor: pointer;">Şimdi Güncelle</button>
+    </div>
+
+    <!-- Ayarlar Modalı -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 style="font-size: 20px; margin-bottom: 8px;">⚙️ Oyun Ayarları</h2>
+            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Sürüm: <span id="app-version">v1.0.2 (GitHub Auto-Update)</span></div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button id="btn-sound-toggle" class="btn-research-action" style="width: 100%;">Ses: AÇIK</button>
+                <button id="btn-check-update" class="btn-research-action" style="width: 100%; background: #0984e3;">🔄 Güncellemeleri Denetle</button>
+                <button onclick="if(!document.fullscreenElement){document.documentElement.requestFullscreen();}else{document.exitFullscreen();}" class="btn-research-action" style="width: 100%; background: #485460;">📱 Tam Ekranı Aç/Kapat</button>
+                <button onclick="location.reload();" class="btn-research-action" style="width: 100%; background: #d63031;">Yeniden Başlat</button>
+                <button id="settings-close" class="btn-research-action" style="width: 100%; background: #2d3436; margin-top: 8px;">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- İstatistikler Modalı -->
+    <div id="stats-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 style="font-size: 20px; margin-bottom: 16px;">🏆 Kabile Sıralaması (Stats)</h2>
+            <div id="stats-leaderboard"></div>
+            <button id="stats-close" class="btn-research-action" style="width: 100%; margin-top: 18px; background: #2d3436;">Kapat</button>
+        </div>
+    </div>
+
+    <!-- Oyun Sonu Modalı -->
+    <div id="game-over-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="text-align: center;">
+            <h2 id="game-over-title" style="font-size: 26px; margin-bottom: 8px;">🏆 ZAFER!</h2>
+            <p id="game-over-reason" style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Haritayı fethettiniz!</p>
+            <button id="btn-play-again" class="btn-play-game" style="width: 100%;">TEKRAR OYNA</button>
+        </div>
+    </div>
+
+    <!-- PWA Service Worker ve Otomatik Güncelleme Motoru -->
+    <script>
+        let waitingWorker = null;
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    // Güncelleme kontrolü
+                    reg.onupdatefound = () => {
+                        const newWorker = reg.installing;
+                        newWorker.onstatechange = () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                waitingWorker = newWorker;
+                                const banner = document.getElementById('update-banner');
+                                if (banner) banner.style.display = 'flex';
+                            }
+                        };
+                    };
+                }).catch(() => {});
+
+                // Yeni worker devreye girdiğinde sayfayı pürüzsüzce yenile
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        window.location.reload();
+                    }
+                });
+            });
+        }
+
+        // Güncellemeyi uygula butonu
+        document.getElementById('btn-apply-update')?.addEventListener('click', () => {
+            if (waitingWorker) {
+                waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+                window.location.reload();
+            }
+        });
+
+        // Manuel Güncelleme Denetimi Butonu
+        document.getElementById('btn-check-update')?.addEventListener('click', () => {
+            const btn = document.getElementById('btn-check-update');
+            btn.textContent = "Denetleniyor...";
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistration().then((reg) => {
+                    if (reg) {
+                        reg.update().then(() => {
+                            setTimeout(() => {
+                                btn.textContent = "✓ Uygulama Güncel! (v1.0.2)";
+                                setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2500);
+                            }, 800);
+                        });
+                    } else {
+                        btn.textContent = "✓ En Son Sürüm";
+                        setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2000);
+                    }
+                });
+            } else {
+                btn.textContent = "✓ En Son Sürüm";
+                setTimeout(() => { btn.textContent = "🔄 Güncellemeleri Denetle"; }, 2000);
+            }
+        });
+    </script>
+
+    <!-- Oyun Başlatıcı -->
+    <script type="module">
+        import { GameUI } from './js/game-ui.js';
+        window.addEventListener('DOMContentLoaded', () => {
+            window.gameUI = new GameUI();
+        });
+    </script>
+</body>
+</html>

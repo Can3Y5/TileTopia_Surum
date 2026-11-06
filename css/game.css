@@ -1,0 +1,493 @@
+/* ==========================================================================
+   Kabileler — The Battle of Polytopia (Official Mobile & Android Styling)
+   Görsel 1, 2, 3 ve 4 ile birebir uyumlu Polytopia mobil arayüzü.
+   ========================================================================== */
+
+:root {
+    --bg-space: #000000;
+    --font-stack: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    --gold: #f1c40f;
+    --cyan: #00cec9;
+    --green: #2ecc71;
+    --red: #ff4757;
+    --text-white: #ffffff;
+    --text-muted: rgba(255, 255, 255, 0.75);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-space);
+    font-family: var(--font-stack);
+    color: var(--text-white);
+    position: fixed;
+}
+
+#canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    touch-action: none; /* Android parmak kaydırmayı browser'a bırakmaz */
+}
+
+/* ==========================================================================
+   ÜST MERKEZ HUD (Görsel 3 ve 4'teki Sade ve Şık Başlık)
+   ========================================================================== */
+
+.top-hud-bar {
+    position: absolute;
+    top: max(16px, env(safe-area-inset-top));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 36px;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.top-hud-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top-hud-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.top-hud-val {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-white);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.top-hud-val .star-icon {
+    color: var(--gold);
+    font-size: 22px;
+}
+
+/* ==========================================================================
+   SAĞ ALT DOKUNMATİK EYLEM BUTONLARI (Görsel 4)
+   ========================================================================== */
+
+.bottom-action-bar {
+    position: absolute;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    right: max(24px, env(safe-area-inset-right));
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    z-index: 20;
+}
+
+.action-circle-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.action-circle-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(18, 25, 33, 0.9);
+    border: 3px solid rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+}
+
+.action-circle-btn:active {
+    transform: scale(0.92);
+}
+
+.action-circle-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Teknoloji Butonu (Mavi Parlayan Daire) */
+.btn-circle-tech {
+    background: radial-gradient(circle, #0984e3 0%, #00cec9 100%);
+    border-color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 206, 201, 0.5);
+}
+
+/* Turu Bitir Butonu (Siyah/Beyaz Onay Butonu) */
+.btn-circle-end-turn {
+    background: #000000;
+    border-color: #ffffff;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.btn-circle-end-turn.has-actions {
+    border-color: var(--gold);
+    box-shadow: 0 0 22px rgba(241, 196, 15, 0.6);
+}
+
+/* Sıralama Rozeti */
+.rank-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #0984e3;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 1px solid #ffffff;
+}
+
+/* Sol Üst Geri Butonu (<) */
+.circle-back-btn {
+    position: absolute;
+    top: max(16px, env(safe-area-inset-top));
+    left: max(20px, env(safe-area-inset-left));
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    font-size: 24px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    z-index: 30;
+    transition: transform 0.15s ease;
+}
+
+.circle-back-btn:active {
+    transform: scale(0.92);
+}
+
+/* ==========================================================================
+   KABİLE SEÇİM EKRANI (Görsel 2 — Pembe Gün Batımı Teması)
+   ========================================================================== */
+
+.screen-tribe-picker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #e84393 0%, #fd79a8 35%, #e17055 75%, #0984e3 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+    overflow-y: auto;
+    padding: max(20px, env(safe-area-inset-top)) 20px 40px 20px;
+}
+
+.screen-tribe-picker.hidden {
+    display: none;
+}
+
+.tribe-picker-title {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    color: #ffffff;
+    margin-top: 10px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tribe-picker-subtitle {
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 6px 0 24px 0;
+}
+
+.tribe-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px 24px;
+    max-width: 680px;
+    width: 100%;
+    justify-items: center;
+}
+
+@media (max-width: 600px) {
+    .tribe-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+.tribe-portrait-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.tribe-portrait-card:hover {
+    transform: scale(1.06);
+}
+
+.tribe-avatar-circle {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, #74b9ff 100%);
+    border: 3.5px solid #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 44px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tribe-portrait-card.selected .tribe-avatar-circle {
+    box-shadow: 0 0 25px #ffffff, 0 8px 24px rgba(0, 0, 0, 0.6);
+    border-color: var(--gold);
+    transform: scale(1.04);
+}
+
+.tribe-avatar-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.tribe-config-panel {
+    margin-top: 24px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-play-game {
+    padding: 14px 44px;
+    background: #0984e3;
+    border: 3px solid #ffffff;
+    border-radius: 30px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.btn-play-game:active {
+    transform: scale(0.95);
+    background: #00cec9;
+}
+
+/* ==========================================================================
+   RADYAL TEKNOLOJİ AĞACI (Görsel 3 — Radial Tech Tree Screen)
+   ========================================================================== */
+
+.screen-tech-radial {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.screen-tech-radial.hidden {
+    display: none;
+}
+
+#radial-tree-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.radial-footer-text {
+    position: absolute;
+    bottom: max(24px, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    z-index: 5;
+    line-height: 1.4;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* Teknoloji Detay ve Araştırma Alt Sayfası */
+.tech-detail-sheet {
+    position: absolute;
+    bottom: max(80px, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 25, 33, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    animation: slideUp 0.2s ease;
+}
+
+.tech-detail-sheet.hidden {
+    display: none;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.btn-research-action {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #00cec9, #0984e3);
+    border: none;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   ALT KARE / BİRLİK / ŞEHİR PANELİ (DRAWER)
+   ========================================================================== */
+
+.context-drawer {
+    position: absolute;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: max(20px, env(safe-area-inset-left));
+    width: calc(100% - 320px);
+    max-width: 520px;
+    background: rgba(18, 25, 33, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 14px 18px;
+    z-index: 20;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.context-drawer.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+}
+
+@media (max-width: 768px) {
+    .context-drawer {
+        width: calc(100% - 40px);
+        bottom: 110px; /* Butonların üzerine binmemesi için */
+    }
+}
+
+/* Bildirimler (Toasts) */
+.toast-container {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top));
+    right: max(20px, env(safe-area-inset-right));
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.toast {
+    padding: 10px 16px;
+    background: rgba(18, 25, 33, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 4px solid var(--cyan);
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+/* Ayarlar ve İstatistik Modalları */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: rgba(18, 25, 33, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+}
