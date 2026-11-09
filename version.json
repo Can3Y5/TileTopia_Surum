@@ -1,8 +1,8 @@
 {
-  "version": "1.0.5",
-  "name": "TileTopia v1.0.5 - Asker & Şehir Seçim Döngüsü",
-  "releaseNotes": "Asker ↔ Şehir/Bina seçim döngüsü (1. tık Asker, 2. tık Şehir/Bina, 3. tık Asker), çekmece içi geçiş sekmeleri ve 3B şehir mimarisi optimizasyonları eklendi.",
-  "publishedAt": "2026-11-07",
-  "apkUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.5/TileTopia.apk",
-  "exeUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.0.5/TileTopia.exe"
+  "version": "1.3.1",
+  "name": "TileTopia v1.3.1 - Büyük Genişleme & Performans Optimizasyonu",
+  "releaseNotes": "Kaynak depoları (Gıda, Odun, Metal), 3B Atlı Kervanlar & Baskın, Kelle Ödülü (Bounty), Vahşi Hayvanlar, Donan Nehirler, Zombi Salgını & Boss ve Three.js GPU havuz optimizasyonu eklendi.",
+  "publishedAt": "2026-11-09",
+  "apkUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.3.1/TileTopia.apk",
+  "exeUrl": "https://github.com/Can3Y5/TileTopia_Surum/releases/download/v1.3.1/TileTopia.exe"
 }
